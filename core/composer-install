@@ -73,10 +73,6 @@ class ComposerInstall:
         self.sysBinDir            = None
         self.buildrootSysBinDir   = None
 
-        if not 'name' in self.metadata or not self.metadata['name']:
-            print >> sys.stderr, 'ERROR: Composer install: "name" not defined in composer.json'
-            sys.exit(1)
-
         self._initVendorDir()
         self._initComposerDirs()
         self._initPackageDirs()
@@ -175,6 +171,10 @@ class ComposerInstall:
         #
         # packageDir
         #
+
+        if not 'name' in self.metadata or not self.metadata['name']:
+        print >> sys.stderr, 'ERROR: Composer install: "name" not defined in composer.json'
+        sys.exit(1)
 
         self.packageDir = os.path.join(self.composerDir, self.metadata['name'])
 

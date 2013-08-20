@@ -24,6 +24,8 @@ WARNING: This is just a development RPM.  Please submit issues at
 
 
 %prep
+[ -e %{name}-%{version} ]  && rm -rf %{name}-%{version}
+mkdir %{name}-%{version} && cd %{name}-%{version}
 cat > app.php <<EOL
 Well, this is our app that wants some composer deps
 EOL
@@ -43,11 +45,14 @@ EOL
 
 
 %install
+cd %{name}-%{version}
 mkdir -p %{buildroot}%{_datadir}/php/compsertestapp
 install -pm 644 app.php %{buildroot}%{_datadir}/php/compsertestapp
+install -pm 644 composer.json %{buildroot}%{_datadir}/php/compsertestapp
 
-# now pull in specified deps
-%{composer_install} --no-package-dir
+# now pull in specified deps - this creates the vendor dir
+%{composer_install} --no-package-dir --verbose
+cp -a vendor %{buildroot}%{_datadir}/php/compsertestapp
 
 
 %files
